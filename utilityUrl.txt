@@ -1,0 +1,7 @@
+Jwt
+//https://codeburst.io/jwt-auth-in-asp-net-core-148fb72bed03
+//https://jasonwatmore.com/post/2020/05/25/aspnet-core-3-api-jwt-authentication-with-refresh-tokens
+
+PolicyProvider
+https://github.com/blowdart/AspNetAuthorization-Samples/tree/master/src/PolicyProvider
+
