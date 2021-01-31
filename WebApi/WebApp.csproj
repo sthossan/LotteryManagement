@@ -7,15 +7,21 @@
   <ItemGroup>
     <Compile Remove="Controllers\Entities\**" />
     <Compile Remove="Controllers\Models\**" />
+    <Compile Remove="Controllers\Models\Entities\**" />
     <Content Remove="Controllers\Entities\**" />
     <Content Remove="Controllers\Models\**" />
+    <Content Remove="Controllers\Models\Entities\**" />
     <EmbeddedResource Remove="Controllers\Entities\**" />
     <EmbeddedResource Remove="Controllers\Models\**" />
+    <EmbeddedResource Remove="Controllers\Models\Entities\**" />
     <None Remove="Controllers\Entities\**" />
     <None Remove="Controllers\Models\**" />
+    <None Remove="Controllers\Models\Entities\**" />
   </ItemGroup>
 
   <ItemGroup>
+    <Compile Remove="Controllers\TokenUsersController.cs" />
+    <Compile Remove="Controllers\TokenUserService.cs" />
     <Compile Remove="Controllers\UsersController.cs" />
     <Compile Remove="Controllers\UserService.cs" />
   </ItemGroup>

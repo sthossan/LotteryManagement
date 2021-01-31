@@ -13,6 +13,7 @@ using Microsoft.AspNetCore.Mvc;
 using Services;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc.Authorization;
+using Services.Securites;
 
 namespace WebApi
 {
@@ -83,7 +84,8 @@ namespace WebApi
             //    }
             //}
 
-            services.AddDbContext<EfDbContext>(opts => opts.UseSqlServer(Configuration.GetConnectionString("DefaultConnection"), options => options.MigrationsAssembly("WebApi")));
+            services.AddDbContext<EfDbContext>(opts => opts.UseNpgsql(Configuration.GetConnectionString("DefaultConnection"), options => options.MigrationsAssembly("WebApi")));
+            //services.AddDbContext<EfDbContext>(opts => opts.UseSqlServer(Configuration.GetConnectionString("DefaultConnection"), options => options.MigrationsAssembly("WebApi")));
 
             //services.AddDbContext<EfDbContext>(DbContextOptionsBuilder);
 
@@ -148,7 +150,11 @@ namespace WebApi
             #region Application Service Dependency
            
             services.AddScoped<IUserService, UserService>();
-            services.AddScoped<IGenreService, GenreService>();
+
+            services.AddScoped<IUserSellerService, UserSellerService>();
+            services.AddScoped<IMobileVersionService, MobileVersionService>();
+            services.AddScoped<IOnlineService, OnlineService>();
+
 
             #endregion
 

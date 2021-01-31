@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Services.Securites;
 using Services;
 using System;
 using System.Security.Claims;
@@ -11,36 +12,52 @@ namespace WebApi.Controllers
     [ApiController, Route("api/[controller]"), Authorize]
     public class AccountController : ControllerBase
     {
-        private readonly IUserService _userService;
+        private readonly IUserSellerService _userService;
+        private readonly IOnlineService _onlineService;
+        private readonly IMobileVersionService _mobileVersionService;
+
         private readonly IJwtAuthManager _jwtAuthManager;
 
-        public AccountController(IUserService userService, IJwtAuthManager jwtAuthManager)
+        public AccountController(IUserSellerService userService
+            , IJwtAuthManager jwtAuthManager
+            , IOnlineService onlineService
+            , IMobileVersionService mobileVersionService)
         {
             _userService = userService;
+            _onlineService = onlineService;
+            _mobileVersionService = mobileVersionService;
             _jwtAuthManager = jwtAuthManager;
         }
 
-        [HttpPost("login/{username}/{password}"), AllowAnonymous]
-        public ActionResult Login(string username, string password)
+
+        [HttpGet("checkversion/{versionName}"), AllowAnonymous]
+        public ActionResult CheckVersion(string versionName)
         {
+            return Ok(_mobileVersionService.IsMobileVersionLatest(versionName));
+        }
 
-            if (!_userService.IsValidUserCredentials(username, password))
-            {
+        [HttpPost("login/{deviceCode}/{password}"), AllowAnonymous]
+        public ActionResult Login(string deviceCode, string password)
+        {
+            if (!_onlineService.IsSeverOnline()) return Ok(false);
+
+            if (!_userService.IsValidUserCredentials(deviceCode, password))
                 return Unauthorized();
-            }
 
-            var role = _userService.GetUserRole(username);
+            var user = _userService.GetAsync(t => t.device_code == deviceCode && t.us_pwd == password && t.us_status == 1).Result;
+
+            var role = _userService.GetUserRole();
             var claims = new[]
             {
-                new Claim(ClaimTypes.Name,username),
+                new Claim(ClaimTypes.Name,deviceCode.ToString()),
                 new Claim(ClaimTypes.Role, role)
             };
 
-            var jwtResult = _jwtAuthManager.GenerateTokens(username, claims);
+            var jwtResult = _jwtAuthManager.GenerateTokens(deviceCode.ToString(), claims);
 
             return Ok(new
             {
-                UserName = username,
+                DeviceCode = deviceCode,
                 Role = role,
                 jwtResult.AccessToken,
                 RefreshToken = jwtResult.RefreshToken.TokenString
@@ -55,11 +72,7 @@ namespace WebApi.Controllers
             return Ok();
         }
 
-        [HttpGet("Get")]
-        public ActionResult Get()
-        {
-            return Ok(User.Identity.Name);
-        }
+
 
         private void SetTokenCookie(string token)
         {
