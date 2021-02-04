@@ -74,6 +74,8 @@ namespace WebApi.Controllers
 
 
 
+        #region privete method
+        
         private void SetTokenCookie(string token)
         {
             var cookieOptions = new CookieOptions
@@ -89,6 +91,8 @@ namespace WebApi.Controllers
                 return Request.Headers["X-Forwarded-For"];
             else
                 return HttpContext.Connection.RemoteIpAddress.MapToIPv4().ToString();
-        }
+        } 
+
+        #endregion
     }
 }
