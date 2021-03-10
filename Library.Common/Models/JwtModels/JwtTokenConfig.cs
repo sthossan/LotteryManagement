@@ -8,7 +8,7 @@ namespace Library.Core.Models.JwtModels
     public static class JwtTokenConfig
     {
         [JsonPropertyName("secret")]
-        public static string TokenSecurityKey { get; } = "QS1WRVJZLVNUUk9ORy1LRVktSEVSRS1UQU5WSVJIT1NTQU4tR0FLSy1NRURJQS1CRC1MVEQ=";
+        public static string TokenSecurityKey { get; } = "a brown fox jumps over the lazy dog";
 
         [JsonPropertyName("issuer")]
         public static string TokenIssuer { get; } = "Boilerplate";
@@ -20,7 +20,7 @@ namespace Library.Core.Models.JwtModels
         public static int TokenExpiryTime { get; set; } = 10;
         
         [JsonPropertyName("refreshTokenExpiration")]
-        public static int RefreshTokenExpiryTime { get; set; } = 10;
+        public static int RefreshTokenExpiryTime { get; set; } = 60;
 
         public static string SecurityAlgorithm { get; } = SecurityAlgorithms.HmacSha512Signature;
 

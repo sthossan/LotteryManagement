@@ -13,7 +13,7 @@ namespace Library.Core.IoC
             // accepts any access token issued by identity server
             services.AddAuthentication(option =>
             {
-                option.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+                //option.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
                 option.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
                 option.DefaultScheme = JwtBearerDefaults.AuthenticationScheme;
             })
@@ -47,6 +47,8 @@ namespace Library.Core.IoC
 
             services.AddSingleton<IJwtAuthManager, JwtAuthManager>();
             services.AddHostedService<JwtRefreshTokenCache>();
+            services.AddScoped<IRetrieveDataFromTokenService, RetrieveDataFromTokenService>();
+
         }
     }
 }

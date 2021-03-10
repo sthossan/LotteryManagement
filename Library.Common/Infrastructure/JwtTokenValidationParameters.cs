@@ -17,15 +17,15 @@ namespace Library.Core.Infrastructure
             return new TokenValidationParameters()
             {
                 RequireExpirationTime = true,
-                ValidateIssuer = true,
-                ValidateAudience = true,
                 ValidateLifetime = true,
+                ValidateIssuer = true,
+                ValidIssuer = JwtTokenConfig.TokenIssuer,
+                ValidateAudience = true,
+                ValidAudience = JwtTokenConfig.TokenAudience,
                 ValidateIssuerSigningKey = true,
+                IssuerSigningKey = GetSymmetricSecurityKey(),
                 // set clockskew to zero so tokens expire exactly at token expiration time (instead of 5 minutes later)
                 ClockSkew = TimeSpan.Zero,
-                ValidIssuer = JwtTokenConfig.TokenIssuer,
-                ValidAudience = JwtTokenConfig.TokenAudience,
-                IssuerSigningKey = GetSymmetricSecurityKey(),
             };
         }
     }

@@ -6,6 +6,7 @@ using Services.Securites;
 using Services;
 using System;
 using System.Security.Claims;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 
 namespace WebApi.Controllers
 {
@@ -29,14 +30,19 @@ namespace WebApi.Controllers
             _jwtAuthManager = jwtAuthManager;
         }
 
+        [HttpGet("[action]")]
+        public ActionResult Get()
+        {
+            return Ok("123");
+        }
 
-        [HttpGet("checkversion/{versionName}"), AllowAnonymous]
+        [HttpGet("[action]/{versionName}"), AllowAnonymous]
         public ActionResult CheckVersion(string versionName)
         {
             return Ok(_mobileVersionService.IsMobileVersionLatest(versionName));
         }
 
-        [HttpPost("login/{deviceCode}/{password}"), AllowAnonymous]
+        [HttpPost("[action]/{deviceCode}/{password}"), AllowAnonymous]
         public ActionResult Login(string deviceCode, string password)
         {
             if (!_onlineService.IsSeverOnline()) return Ok(false);
@@ -49,7 +55,8 @@ namespace WebApi.Controllers
             var role = _userService.GetUserRole();
             var claims = new[]
             {
-                new Claim(ClaimTypes.Name,deviceCode.ToString()),
+                new Claim(ClaimTypes.Name, deviceCode.ToString()),
+                new Claim(ClaimTypes.NameIdentifier, deviceCode.ToString()),
                 new Claim(ClaimTypes.Role, role)
             };
 
@@ -64,7 +71,7 @@ namespace WebApi.Controllers
             });
         }
 
-        [HttpPost("logout")]
+        [HttpPost("[action]")]
         public ActionResult Logout()
         {
             var userName = User.Identity.Name;
@@ -72,10 +79,8 @@ namespace WebApi.Controllers
             return Ok();
         }
 
-
-
         #region privete method
-        
+
         private void SetTokenCookie(string token)
         {
             var cookieOptions = new CookieOptions
@@ -91,7 +96,7 @@ namespace WebApi.Controllers
                 return Request.Headers["X-Forwarded-For"];
             else
                 return HttpContext.Connection.RemoteIpAddress.MapToIPv4().ToString();
-        } 
+        }
 
         #endregion
     }

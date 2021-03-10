@@ -8,17 +8,18 @@ namespace Library.Core.ViewModels
     {
         public Response()
         {
-            Status = Status.Success;
-            Message = Status.Success.ToString();
+            Status = true;
+            StatusCode = StatusCode.Success;
+            Message = StatusCode.Success.ToString();
         }
-        public Status Status { get; set; }
+        public bool Status { get; set; }
+        public StatusCode StatusCode { get; set; }
         public string Message { get; set; }
         public int TotalRecords { get; set; }
         public object Data { get; set; }
-        public object Error { get; set; }
     }
 
-    public enum Status
+    public enum StatusCode
     {
         Success = 200,
         Created = 201,

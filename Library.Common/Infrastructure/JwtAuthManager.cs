@@ -54,25 +54,12 @@ namespace Library.Core.Infrastructure
 
         public JwtAuthResult GenerateTokens(string username, Claim[] claims)
         {
-            #region old_JwtSecurityToken
-            //var shouldAddAudienceClaim = string.IsNullOrWhiteSpace(claims?.FirstOrDefault(x => x.Type == JwtRegisteredClaimNames.Aud)?.Value);
-            //var jwtToken = new JwtSecurityToken(
-            //        JwtTokenConfig.TokenIssuer,
-            //        //shouldAddAudienceClaim ? JwtTokenConfig.TokenAudience : string.Empty,
-            //        JwtTokenConfig.TokenAudience,
-            //        claims,
-            //        expires: DateTime.Now.AddSeconds(Convert.ToInt32(JwtTokenConfig.TokenExpiryTime)),
-            //        signingCredentials: new SigningCredentials(JwtTokenValidationParameters.GetSymmetricSecurityKey(), JwtTokenConfig.SecurityAlgorithm)
-            //    );
-            //var accessToken = new JwtSecurityTokenHandler().WriteToken(jwtToken); 
-            #endregion
-
             #region SecurityTokenDescriptor
 
             SecurityTokenDescriptor securityTokenDescriptor = new SecurityTokenDescriptor
             {
                 Subject = new ClaimsIdentity(claims),
-                Expires = DateTime.Now.AddSeconds(Convert.ToInt32(JwtTokenConfig.TokenExpiryTime)),
+                Expires = DateTime.Now.AddMinutes(Convert.ToInt32(JwtTokenConfig.TokenExpiryTime)),
                 Issuer = JwtTokenConfig.TokenIssuer,
                 Audience = JwtTokenConfig.TokenAudience,
                 TokenType = JwtBearerDefaults.AuthenticationScheme,
@@ -103,7 +90,7 @@ namespace Library.Core.Infrastructure
         public JwtAuthResult Refresh(string refreshToken, string accessToken, DateTime now)
         {
             var (principal, jwtToken) = DecodeJwtToken(accessToken);
-            if (jwtToken == null || !jwtToken.Header.Alg.Equals(SecurityAlgorithms.HmacSha256Signature))
+            if (jwtToken == null || !jwtToken.Header.Alg.Equals(JwtTokenConfig.SecurityAlgorithm))
             {
                 throw new SecurityTokenException("Invalid token");
             }

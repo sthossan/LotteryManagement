@@ -29,12 +29,15 @@ namespace Models.DataContext
             builder.Entity<Online>().ToTable("tbl_online");
             builder.Entity<DigitLenght>().ToTable("tbl_digit_lenght");
             builder.Entity<LotteryNumber>().ToTable("tbl_lottery_number");
-            builder.Entity<BillDetail>().ToTable("tbl_bill_detail");
             builder.Entity<Bill>().ToTable("tbl_bill");
+            builder.Entity<BillDetail>().ToTable("tbl_bill_detail");
+            builder.Entity<BillCancel>().ToTable("tbl_bill_cancel");
             builder.Entity<DeadLineLottery>().ToTable("tbl_dead_line_lottery");
-            //builder.Entity<UserSeller>().ToTable("tbl_bill_cancel");
             builder.Entity<Device>().ToTable("tbl_device");
             builder.Entity<ClearTime>().ToTable("tbl_clear_time");
+            builder.Entity<SaleSetNumber>().ToTable("tbl_set_number");
+
+            builder.Entity<BillDetail>().Property(o => o.bd_id).HasDefaultValueSql("nextval('\"tbl_bill_detail_bd_id_seq\"')");
         }
 
         #region DbSet
@@ -46,11 +49,13 @@ namespace Models.DataContext
         public DbSet<Online> Online { get; set; }
         public DbSet<DigitLenght> DigitLenght { get; set; }
         public DbSet<LotteryNumber> LotteryNumber { get; set; }
-        public DbSet<BillDetail> BillDetail { get; set; }
         public DbSet<Bill> Bill { get; set; }
+        public DbSet<BillDetail> BillDetail { get; set; }
+        public DbSet<BillCancel> BillCancel { get; set; }
         public DbSet<DeadLineLottery> DeadLineLottery { get; set; }
-        public DbSet<Device> UserSeDeviceller { get; set; }
+        public DbSet<Device> Device { get; set; }
         public DbSet<ClearTime> ClearTime { get; set; }
+        public DbSet<SaleSetNumber> SaleSetNumber { get; set; }
 
         #endregion
 

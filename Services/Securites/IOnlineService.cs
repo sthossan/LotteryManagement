@@ -9,5 +9,7 @@ namespace Services
     public interface IOnlineService : IGenericRepository<Online>
     {
         bool IsSeverOnline();
+
+        object Get(string deviceCode);
     }
 }
